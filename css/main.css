@@ -1,0 +1,88 @@
+html, body {
+  height: 100%;
+}
+
+input, button {
+  padding: 0;
+  margin: 0;
+
+  font-size: inherit;
+  font-family: inherit;
+}
+
+input:focus, button:focus {
+  outline: none;
+}
+
+h1, p {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-flow: column;
+}
+
+.game {
+  flex: 1;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.game__content {
+  margin: 1em 0;
+}
+
+.city-search {
+  display: inline-table;
+}
+
+.city-search__element {
+  display: table-cell;
+  height: 40px;
+
+  font-size: 14px;
+
+  border: 1px solid lightgray;
+}
+
+.city-search__input {
+  width: 240px
+}
+
+.city-search__button {
+  width: 80px;
+}
+
+.input, .button {
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+
+  border: none;
+}
+
+.input {
+  padding: 0 10px;
+}
+
+.button {
+  background-color: lightcyan;
+}
+
+.button:active {
+  background-color: lightblue;
+}
+
+
+.map {
+  flex: 1;
+  display: flex;
+}

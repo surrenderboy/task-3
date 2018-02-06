@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+
+require 'json'
+
+geonames_filename, alternate_names_filename, isolang, output_filename = ARGV
+
+geoname_ids = []
+localized_names = []
+
+File.open(geonames_filename) do |file|
+  puts 'Started reading geonames'
+
+  file.each_line { |l| geoname_ids << l.split("\t")[0] }
+
+  puts "Read #{geoname_ids.length} geonames"
+end
+
+puts 'Started grepping translations'
+
+alternate_names = `grep '\t#{isolang}\t' #{alternate_names_filename}` # grep is faster!
+alternate_names = alternate_names.split("\n")
+
+alternate_names_length = alternate_names.length
+
+puts "Grepped #{alternate_names_length} translations"
+
+puts 'Started searching through translations'
+
+alternate_names.each.with_index do |alternate_name, i|
+  if i % 100_000 == 99_999
+    puts "Searched through #{i + 1} / #{alternate_names_length}"
+  end
+
+  alternate_name = alternate_name.split("\t")
+
+  next unless geoname_ids.include?(alternate_name[1])
+
+  localized_names << alternate_name[3]
+end
+
+puts 'Completed!'
+
+File.open(output_filename, 'w') do |file|
+  JSON.dump(
+    localized_names
+      .uniq
+      .tap { |ln| puts "Translated #{ln.length} geonames"}
+      .map(&:chomp)
+      .sort
+      .group_by { |n| n[0] },
+    file
+  )
+end
+
+puts 'Written to json'
