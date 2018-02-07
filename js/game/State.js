@@ -39,11 +39,14 @@
       if ( this._beginsWithWrongLetter(cityName) ) {
         return Promise.reject(`Надо выбрать город на букву ${this._nextLetter}.`);
       }
+
+      cityName = this._citiesCollection.normalize(cityName);
+
+      if ( !cityName ) {
+        return Promise.reject('Я не знаю такого города.');
+      }
       if ( this._wasNamed(cityName) ) {
         return Promise.reject('Такой город уже был.');
-      }
-      if ( !this._citiesCollection.has(cityName) ) {
-        return Promise.reject('Я не знаю такого города.');
       }
 
       return (

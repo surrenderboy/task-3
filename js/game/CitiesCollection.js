@@ -9,9 +9,9 @@
     }
 
     getRandomCity(letter) {
-      let arr = this._cities[letter];
+      let names = Object.values(this._cities[letter.toUpperCase()]);
 
-      return arr[randomInt(0, arr.length)];
+      return names[randomInt(0, names.length)];
     }
 
     loadCities() {
@@ -22,11 +22,12 @@
       );
     }
 
-    has(cityName) {
-      let firstLetter = cityName.slice(0, 1);
-      let citiesSet = new Set(this._cities[firstLetter]);
+    normalize(cityName) {
+      cityName = cityName.toLowerCase().replace(/-/g, ' ');
 
-      return citiesSet.has(cityName);
+      let firstLetter = cityName.slice(0, 1).toUpperCase();
+
+      return this._cities[firstLetter][cityName];
     }
   }
 

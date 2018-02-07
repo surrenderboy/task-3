@@ -16,7 +16,7 @@
         event.preventDefault();
 
         let input = event.target.querySelector('.input');
-        let cityName = input.value;
+        let cityName = input.value.trim();
 
         controller.makeMove(cityName)
           .then(() => input.value = '')

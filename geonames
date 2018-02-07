@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
 
 require 'json'
+require 'set'
 
 geonames_filename, alternate_names_filename, isolang, output_filename = ARGV
 
-geoname_ids = []
+geoname_ids = Set.new
 localized_names = []
 
 File.open(geonames_filename) do |file|
@@ -17,7 +18,8 @@ end
 
 puts 'Started grepping translations'
 
-alternate_names = `grep '\t#{isolang}\t' #{alternate_names_filename}` # grep is faster!
+# grep is faster than reading the whole file by one line
+alternate_names = `grep '\t#{isolang}\t' #{alternate_names_filename}`
 alternate_names = alternate_names.split("\n")
 
 alternate_names_length = alternate_names.length
@@ -47,7 +49,16 @@ File.open(output_filename, 'w') do |file|
       .tap { |ln| puts "Translated #{ln.length} geonames"}
       .map(&:chomp)
       .sort
-      .group_by { |n| n[0] },
+      .group_by { |n| n[0] }
+      .tap do |grouped|
+        grouped.each do |letter, names|
+          grouped[letter] = Hash[
+            names.map do |name|
+              [name.downcase.gsub('-',' '), name]
+            end
+          ]
+        end
+      end,
     file
   )
 end

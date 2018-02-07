@@ -64,7 +64,7 @@
         return;
       }
 
-      yield this._map.createPlacemark(geoObject, cityName, HUMAN);
+      yield this._map.createPlacemark(geoObject, this._state.lastCityName, HUMAN);
 
       try {
         geoObject = yield this._state.computerAdd();
