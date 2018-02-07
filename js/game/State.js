@@ -27,6 +27,14 @@
       return this._lastCityName;
     }
 
+    get humanMoves() {
+      return this._humanMoves;
+    }
+
+    get computerMoves() {
+      return this._computerMoves;
+    }
+
     humanAdd(cityName) {
       if ( this._beginsWithWrongLetter(cityName) ) {
         return Promise.reject(`Надо выбрать город на букву ${this._nextLetter}.`);

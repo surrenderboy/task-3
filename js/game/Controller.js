@@ -7,8 +7,13 @@
   const State = root.game.State;
   const Map = root.game.Map;
 
+  const renderer = root.game.renderer;
+
   const HUMAN = root.game.HUMAN;
   const COMPUTER = root.game.COMPUTER;
+
+  let citiesCollection = new CitiesCollection();
+
 
   class Controller {
     constructor(mapContainer, citiesCollection) {
@@ -17,8 +22,6 @@
     }
 
     static ready(mapContainer) {
-      let citiesCollection = new CitiesCollection();
-
       return (
         Promise
           .all([
@@ -37,13 +40,26 @@
       );
     }
 
+    endGame(winner) {
+      renderer.showFinalState(this._state, winner);
+    }
+
+    newGame() {
+      this._state = new State(citiesCollection);
+      this._map.clear();
+
+      renderer.reset();
+    }
+
     *_makeMove(cityName) {
       let geoObject;
+
+      renderer.computerSays('Хм...')
 
       try {
         geoObject = yield this._state.humanAdd(cityName);
       } catch(e) {
-        alert(e);
+        renderer.computerSays(e);
 
         return;
       }
@@ -53,13 +69,14 @@
       try {
         geoObject = yield this._state.computerAdd();
       } catch(e) {
-        alert(e);
-        // this.endGame(HUMAN);
+        renderer.computerSays(e);
+        this.endGame(HUMAN);
 
         return;
       }
 
-      // this._renderer.showState(this._state);
+      renderer.showState(this._state);
+      renderer.showControls();
 
       yield this._map.createPlacemark(geoObject, this._state.lastCityName, COMPUTER);
     }

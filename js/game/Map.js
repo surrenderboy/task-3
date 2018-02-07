@@ -37,6 +37,16 @@
       );
     }
 
+    clear() {
+      this._map.geoObjects.removeAll();
+
+      this._map.panTo([0, 0]);
+
+      if (this._map.getZoom() != DEFAULT_ZOOM) {
+        this._map.setZoom(DEFAULT_ZOOM, { duration: 500 });
+      }
+    }
+
     _addPlacemark(placemark) {
       this._map.geoObjects.add(placemark);
 

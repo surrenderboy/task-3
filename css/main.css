@@ -14,7 +14,7 @@ input:focus, button:focus {
   outline: none;
 }
 
-h1, p {
+h1, h2, p {
   padding: 0;
   margin: 0;
 }
@@ -40,6 +40,23 @@ body {
   margin: 1em 0;
 }
 
+.game__content_hidden {
+  display: none !important;
+}
+
+.description {
+  text-align: center;
+}
+
+.description__label {
+  margin-bottom: 1em;
+}
+
+.description__link {
+  text-decoration: none;
+  color: cornflowerblue;
+}
+
 .city-search {
   display: inline-table;
 }
@@ -47,26 +64,36 @@ body {
 .city-search__element {
   display: table-cell;
   height: 40px;
-
-  font-size: 14px;
-
-  border: 1px solid lightgray;
 }
 
 .city-search__input {
+  height: 100%;
   width: 240px
 }
 
 .city-search__button {
+  height: 100%;
   width: 80px;
+}
+
+.computer-says {
+  text-align: center;
+}
+
+.computer-says__label {
+  margin-bottom: 1em;
+}
+
+.computer-says__message_accent {
+  color: lightcoral;
 }
 
 .input, .button {
   box-sizing: border-box;
-  height: 100%;
-  width: 100%;
 
-  border: none;
+  font-size: 14px;
+
+  border: 1px solid lightgray;
 }
 
 .input {
@@ -74,15 +101,26 @@ body {
 }
 
 .button {
-  background-color: lightcyan;
+  background-color: lightyellow;
+
+  padding: 10px 20px;
 }
 
 .button:active {
-  background-color: lightblue;
+  background-color: lightgoldenrodyellow;
+}
+
+.button_coral {
+  color: white;
+  background-color: lightcoral;
+}
+
+.button_coral:active {
+  background-color: coral;
 }
 
 
 .map {
-  flex: 1;
+  flex: 1 0;
   display: flex;
 }
