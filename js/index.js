@@ -4,10 +4,13 @@
   const COMPUTER = root.game.COMPUTER;
 
   const Controller = root.game.Controller;
+  const recognition = root.game.recognition;
 
   Controller
     .ready('map')
     .then(controller => {
+      recognition.init();
+
       let citySearch = document.querySelector('.city-search');
       let surrenderButton = document.querySelector('.surrender-button');
       let newGameButton = document.querySelector('.new-game-button');

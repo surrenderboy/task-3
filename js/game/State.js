@@ -3,6 +3,8 @@
 
   const ymaps = root.ymaps;
 
+  const citiesCollection = root.game.citiesCollection;
+
   const HUMAN = root.game.HUMAN;
   const COMPUTER = root.game.COMPUTER;
 
@@ -11,7 +13,6 @@
 
   class State {
     constructor(citiesCollection) {
-      this._citiesCollection = citiesCollection;
       this._humanMoves = new Set();
       this._computerMoves = new Set();
       this._lastCityName = null;
@@ -40,7 +41,7 @@
         return Promise.reject(`Надо выбрать город на букву ${this._nextLetter}.`);
       }
 
-      cityName = this._citiesCollection.normalize(cityName);
+      cityName = citiesCollection.normalize(cityName);
 
       if ( !cityName ) {
         return Promise.reject('Я не знаю такого города.');
@@ -68,7 +69,7 @@
       let cityName;
 
       while (this._computerTries < MAX_TRIES) {
-        cityName = this._citiesCollection.getRandomCity(this._nextLetter);
+        cityName = citiesCollection.getRandomCity(this._nextLetter);
 
         if ( this._wasNamed(cityName) ) {
           this._computerTries++;

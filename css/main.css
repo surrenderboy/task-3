@@ -28,7 +28,7 @@ body {
 }
 
 .game {
-  flex: 1;
+  flex: 1.2;
   display: flex;
   flex-flow: column;
   align-items: center;
@@ -62,13 +62,23 @@ body {
 }
 
 .city-search__element {
+  position: relative;
   display: table-cell;
   height: 40px;
 }
 
+.city-search__micro {
+  position: absolute;
+
+  top: 10px;
+  right: 15px;
+
+  cursor: pointer;
+}
+
 .city-search__input {
   height: 100%;
-  width: 240px
+  width: 240px;
 }
 
 .city-search__button {

@@ -3,22 +3,19 @@
 
   const ymaps = root.ymaps;
 
-  const CitiesCollection = root.game.CitiesCollection;
   const State = root.game.State;
   const Map = root.game.Map;
 
   const renderer = root.game.renderer;
+  const citiesCollection = root.game.citiesCollection;
 
   const HUMAN = root.game.HUMAN;
   const COMPUTER = root.game.COMPUTER;
 
-  let citiesCollection = new CitiesCollection();
-
-
   class Controller {
-    constructor(mapContainer, citiesCollection) {
+    constructor(mapContainer) {
       this._map = new Map(mapContainer);
-      this._state = new State(citiesCollection);
+      this._state = new State();
     }
 
     static ready(mapContainer) {
@@ -28,7 +25,7 @@
             ymaps.ready(),
             citiesCollection.loadCities()
           ])
-          .then(() => new Controller(mapContainer, citiesCollection))
+          .then(() => new Controller(mapContainer))
       );
     }
 
@@ -45,7 +42,7 @@
     }
 
     newGame() {
-      this._state = new State(citiesCollection);
+      this._state = new State();
       this._map.clear();
 
       renderer.reset();
