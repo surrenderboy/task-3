@@ -5,7 +5,13 @@
 
   const renderer = root.game.renderer;
 
+  /**
+   * Объект для управления распознаованием голоса
+   */
   const recognition = {
+    /**
+     * Инициализирует обработку звука
+     */
     init() {
       let recognition = new SpeechRecognition();
 

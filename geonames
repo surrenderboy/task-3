@@ -1,5 +1,12 @@
 #!/usr/bin/env ruby
 
+# Небольшой скрипт для локализации базы geonames и генерации нормализованного JSON
+#
+# geonames_filename — файл с гео объектами
+# alternate_names_filename — файл с альтернативными именами для гео объектов
+# isolang — локаль
+# output_filename — файл для записи
+
 require 'json'
 require 'set'
 

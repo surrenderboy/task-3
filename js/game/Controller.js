@@ -12,12 +12,27 @@
   const HUMAN = root.game.HUMAN;
   const COMPUTER = root.game.COMPUTER;
 
+  /**
+   * Класс для управления игрой: обработка ходов, управления картой и остальным
+   * элементами страницы
+   */
   class Controller {
+    /**
+     * Создает экземпляр контроллера
+     *
+     * @param {string} mapContainer контейнер для инициализации карты
+     */
     constructor(mapContainer) {
       this._map = new Map(mapContainer);
       this._state = new State();
     }
 
+    /**
+     * Подготовка игры: загрузка Яндекс.Карт и списка городов
+     *
+     * @param {string} mapContainer контейнер для инициализации карты
+     * @return {Promise} Промис, который возвращает экзэмпляр контроллера
+     */
     static ready(mapContainer) {
       return (
         Promise
@@ -29,6 +44,12 @@
       );
     }
 
+    /**
+     * Обработчик хода игры
+     *
+     * @param {string} cityName название города, введенного пользователем
+     * @return {Promise}
+     */
     makeMove(cityName) {
       return (
         new Promise((resolve, reject) => {
@@ -37,10 +58,18 @@
       );
     }
 
+    /**
+     * Обработчик конца игры
+     *
+     * @param {string} winner победитель
+     */
     endGame(winner) {
       renderer.showFinalState(this._state, winner);
     }
 
+    /**
+     * Начинает новую игру
+     */
     newGame() {
       this._state = new State();
       this._map.clear();
@@ -48,6 +77,11 @@
       renderer.reset();
     }
 
+    /**
+     * Последовательность при обработке хода игры
+     *
+     * @param {string} cityName название города, введенного пользователем
+     */
     *_makeMove(cityName) {
       let geoObject;
 
@@ -79,6 +113,17 @@
     }
   }
 
+  /**
+   * Вспомогательная функция для обработки функций-генераторов, возвращающих
+   * промисы. Итерируется по генератору, на каждой итерации вызывает генератор
+   * со значением, полученным из промиса, возвращенного генератором на предыдущей
+   * итерации.
+   *
+   * @param {*function} generator функция-генератор для итерирования
+   * @param {function} resolve коллбэк для обработки окончания итерациии
+   * @param {function} reject коллбэк для обработки ошибки при итерации
+   * @param {*} yieldValue значение для генератора
+   */
   function execute(generator, resolve, reject, yieldValue) {
     let next = generator.next(yieldValue);
 

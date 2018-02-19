@@ -4,6 +4,9 @@
   const HUMAN = root.game.HUMAN;
   const COMPUTER = root.game.COMPUTER;
 
+  /**
+   * Объект для отрисовки различных элементов игры
+   */
   const renderer = {
     showState(state) {
       let lastCityName = state.lastCityName;

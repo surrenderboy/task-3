@@ -8,7 +8,15 @@
   const COMPUTER_ICON_PRESET = 'islands#redStretchyIcon';
   const DEFAULT_ZOOM = 3;
 
+  /**
+   * Класс для обработки действий над Яндекс.Картами
+   */
   class Map {
+    /**
+     * Инициализирует Яндекс.Карты
+     *
+     * @param {string} container контейнер для Яндекс.Карт
+     */
     constructor(container) {
       this._map =
         new ymaps.Map(
@@ -25,6 +33,14 @@
         );
     }
 
+    /**
+     * Создает метку с названием города на картах
+     *
+     * @param {Object} geoObject гео-объект, полученный при геокодировании
+     * @param {string} cityName название города
+     * @param {string} player игрок, который ставит метку
+     * @returns {Promise} Промис, означающий конец анимации
+     */
     createPlacemark(geoObject, cityName, player) {
       let preset = player === HUMAN ? HUMAN_ICON_PRESET : COMPUTER_ICON_PRESET;
 
@@ -37,6 +53,9 @@
       );
     }
 
+    /**
+     * Очищает карту
+     */
     clear() {
       this._map.geoObjects.removeAll();
 
@@ -47,6 +66,12 @@
       }
     }
 
+    /**
+     * Добавление метки на карту и обработка анимаций
+     *
+     * @param {Object} placemark объект метки Яндекс.Карт
+     * @returns {Promise} Промис, означающий конец анимации
+     */
     _addPlacemark(placemark) {
       this._map.geoObjects.add(placemark);
 

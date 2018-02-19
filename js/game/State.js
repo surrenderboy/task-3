@@ -11,8 +11,14 @@
   const EXCEPTIONS = new Set(['Ы', 'Ь', 'Ъ', 'Ё']);
   const MAX_TRIES = 3;
 
+  /**
+   * Класс для доступа к состоянию игры и его изменения
+   */
   class State {
-    constructor(citiesCollection) {
+    /**
+     * Cоздает начальное состояние игры
+     */
+    constructor() {
       this._humanMoves = new Set();
       this._computerMoves = new Set();
       this._lastCityName = null;
@@ -36,12 +42,20 @@
       return this._computerMoves;
     }
 
+    /**
+     * Изменение состояния игры игроком. При этом проверяются правила игры
+     *
+     * @param {string} cityName город, введенный игроком
+     * @returns {Promise} Возвращает найденный геокодированием объект, если
+     *                    введенное слово удовлетворяет правилам игры. Или
+     *                    сообщение об ошибке в противном случае.
+     */
     humanAdd(cityName) {
       if ( this._beginsWithWrongLetter(cityName) ) {
         return Promise.reject(`Надо выбрать город на букву ${this._nextLetter}.`);
       }
 
-      cityName = citiesCollection.normalize(cityName);
+      cityName = citiesCollection.getOriginalCity(cityName);
 
       if ( !cityName ) {
         return Promise.reject('Я не знаю такого города.');
@@ -65,6 +79,17 @@
       );
     }
 
+
+    /**
+     * Изменение состояния игры компьютером
+     * Если компьютер не может назвать город (либо он был назван, либо он не существует)
+     * больше 3 раз, он сдается.
+     *
+     * @returns {Promise} Возвращает найденный геокодированием объект, если
+     *                    введенное слово удовлетворяет правилам игры. Если
+     *                    количество попыток найти город превышает 3, возвращает
+     *                    сообщение о поражении.
+     */
     computerAdd() {
       let cityName;
 
@@ -98,6 +123,13 @@
       )
     }
 
+    /**
+     * Добавляет город в список назвашему его игроку, изменяет последнее названное
+     * слово и следующую букву
+     *
+     * @param {string} cityName название города
+     * @param {string} player игрок
+     */
     _add(cityName, player) {
       switch (player) {
         case HUMAN:
@@ -114,6 +146,12 @@
       this._nextLetter = findNextLetter(cityName);
     }
 
+    /**
+     * Проверяет, начинается ли город на последнюю букву предыдущего города
+     *
+     * @param {string} cityName название города
+     * @returns {boolean}
+     */
     _beginsWithWrongLetter(cityName) {
       if ( !this._nextLetter ) return false;
 
@@ -122,6 +160,13 @@
       return letter != this._nextLetter;
     }
 
+
+    /**
+     * Проверяет, был ли город назван либо игроком, либо компьютером
+     *
+     * @param {string} cityName название города
+     * @returns {boolean}
+     */
     _wasNamed(cityName) {
       return (
         this._humanMoves.has(cityName) || this._computerMoves.has(cityName)
@@ -129,6 +174,12 @@
     }
   }
 
+  /**
+   * Поиск последней буквы города с пропуском букв-исключений
+   *
+   * @param {string} cityName название города
+   * @returns {string} удовлетворяющая буква
+   */
   function findNextLetter(cityName) {
     let splitted = cityName.split('');
 
