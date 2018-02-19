@@ -47,15 +47,37 @@
     /**
      * Обработчик хода игры
      *
+     * @async
      * @param {string} cityName название города, введенного пользователем
-     * @return {Promise}
      */
-    makeMove(cityName) {
-      return (
-        new Promise((resolve, reject) => {
-          execute( this._makeMove(cityName), resolve, reject );
-        })
-      );
+    async makeMove(cityName) {
+      let geoObject;
+
+      renderer.computerSays('Хм...')
+
+      try {
+        geoObject = await this._state.humanAdd(cityName);
+      } catch(e) {
+        renderer.computerSays(e);
+
+        return;
+      }
+
+      await this._map.createPlacemark(geoObject, this._state.lastCityName, HUMAN);
+
+      try {
+        geoObject = await this._state.computerAdd();
+      } catch(e) {
+        renderer.computerSays(e);
+        this.endGame(HUMAN);
+
+        return;
+      }
+
+      renderer.showState(this._state);
+      renderer.showControls();
+
+      await this._map.createPlacemark(geoObject, this._state.lastCityName, COMPUTER);
     }
 
     /**
@@ -75,69 +97,6 @@
       this._map.clear();
 
       renderer.reset();
-    }
-
-    /**
-     * Последовательность при обработке хода игры
-     *
-     * @param {string} cityName название города, введенного пользователем
-     */
-    *_makeMove(cityName) {
-      let geoObject;
-
-      renderer.computerSays('Хм...')
-
-      try {
-        geoObject = yield this._state.humanAdd(cityName);
-      } catch(e) {
-        renderer.computerSays(e);
-
-        return;
-      }
-
-      yield this._map.createPlacemark(geoObject, this._state.lastCityName, HUMAN);
-
-      try {
-        geoObject = yield this._state.computerAdd();
-      } catch(e) {
-        renderer.computerSays(e);
-        this.endGame(HUMAN);
-
-        return;
-      }
-
-      renderer.showState(this._state);
-      renderer.showControls();
-
-      yield this._map.createPlacemark(geoObject, this._state.lastCityName, COMPUTER);
-    }
-  }
-
-  /**
-   * Вспомогательная функция для обработки функций-генераторов, возвращающих
-   * промисы. Итерируется по генератору, на каждой итерации вызывает генератор
-   * со значением, полученным из промиса, возвращенного генератором на предыдущей
-   * итерации.
-   *
-   * @param {*function} generator функция-генератор для итерирования
-   * @param {function} resolve коллбэк для обработки окончания итерациии
-   * @param {function} reject коллбэк для обработки ошибки при итерации
-   * @param {*} yieldValue значение для генератора
-   */
-  function execute(generator, resolve, reject, yieldValue) {
-    let next = generator.next(yieldValue);
-
-    if (!next.done) {
-      next.value.then(
-        res => execute(generator, resolve, reject, res),
-        err => {
-          reject();
-
-          generator.throw(err);
-        }
-      )
-    } else {
-      resolve();
     }
   }
 
